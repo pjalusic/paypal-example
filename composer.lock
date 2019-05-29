@@ -1,0 +1,56 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "4a2b4e72134944795d7f796ca81152d2",
+    "packages": [
+        {
+            "name": "licensespring/php-plugin",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pjalusic/LicenseSpring-PHP-Plugin.git",
+                "reference": "ff36ff1a0b6f40f45481576f34795ea0cd371ca5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pjalusic/LicenseSpring-PHP-Plugin/zipball/ff36ff1a0b6f40f45481576f34795ea0cd371ca5",
+                "reference": "ff36ff1a0b6f40f45481576f34795ea0cd371ca5",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Petar Jalušić",
+                    "email": "petar@krakensystems.co",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Plugin written in PHP used to create and activate licenses on LicenseSpring using order data from PayPal",
+            "homepage": "https://github.com/pjalusic/LicenseSpring-PHP-Plugin",
+            "keywords": [
+                "licensespring",
+                "licensing",
+                "paypal",
+                "php"
+            ],
+            "time": "2019-05-29T13:30:34+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "licensespring/php-plugin": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
