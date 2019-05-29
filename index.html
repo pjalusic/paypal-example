@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- include our CSS -->
+    <link rel="stylesheet" href="public/licensespring.css">
+
+    <style>
+        form {
+            width: 750px;
+            display: flex;
+            justify-content: center;
+        }
+        label {
+            margin: 0 5px;
+        }
+        input {
+            width: 40px;
+            margin-left: 5px;
+            margin-right: 30px;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <form>
+        <div id="item1">
+            <label>PDF Deluxe Edition</label>
+            [<label>DE</label>]
+            (<output>0.1</output>$)
+            <input name="q1" id="prod1" type="number" maxlength="2">
+        </div>
+
+        <div id="item2">
+            <label>PDF Test Trial</label>
+            [<label>TT</label>]
+            (<output>0.05</output>$)
+            <input name="q2" id="prod2" type="number" size="3">
+        </div>
+    </form>
+
+    <hr>
+
+    <!-- include PayPal JS SDK -->
+    <!-- you should change cliend-id to your id -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AbTezOszedCu8TGm_lYT2m-E40QV7YXlhtTfxvwaUsIskyaK9-nLsi84MoGEHayABQCRLLyCW2dKpGFc"></script>
+
+    <!-- include our JS -->
+    <script src="public/licensespring.js"></script> 
+
+    <!-- template for successful PayPal order creation with license keys from LicenseSpring -->
+    <script>
+
+        let orderData = {};
+        let orderReference = "your-order-reference-number";
+
+        paypal.Buttons({
+            onClick: function(data, action) {
+                // get name, product code, quantity and price for each product
+                let item1 = document.getElementById("item1"),
+                    name1 = item1.querySelectorAll("label")[0].innerHTML,
+                    code1 = item1.querySelectorAll("label")[1].innerHTML,
+                    q1 = parseInt(item1.querySelectorAll("input")[0].value),
+                    price1 = parseFloat(item1.querySelectorAll("output")[0].value),
+                    item2 = document.getElementById("item2"),
+                    name2 = item2.querySelectorAll("label")[0].innerHTML,
+                    code2 = item2.querySelectorAll("label")[1].innerHTML,
+                    q2 = parseInt(item2.querySelectorAll("input")[0].value),
+                    price2 = parseFloat(item2.querySelectorAll("output")[0].value);
+
+                // create an array with products
+                let products = [
+                    {
+                        name: name1,
+                        quantity: q1,
+                        price: price1,
+                        code: code1
+                    },
+                    {
+                        name: name2,
+                        quantity: q2,
+                        price: price2,
+                        code: code2
+                    }
+                ];
+
+                // call backend to get license keys
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    // TODO also handle error
+                    if (this.readyState == 4 && this.status == 200) {
+                        // on success generate order data structure (licensespring.js)
+                        orderData = createOrderDataSctructure(orderReference, this.responseText, "USD");
+                    }
+                };
+                xhttp.open("POST", "api/licensespring-get-licenses.php", true);
+                xhttp.setRequestHeader("Content-type", "application/json");
+                // TODO change that
+                let products_json = { products: products };
+                xhttp.send(JSON.stringify(products_json));
+            },
+
+            createOrder: function(data, actions) {
+                // TODO check if order_data is populated and right format
+                // you can also add more data to your PayPal order
+                return actions.order.create(orderData);
+            },
+
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    /*
+                    // Integration through PayPal webhook
+                    // display activated license keys (licensespring.js)
+                    showLicenseKeys(details);
+                    */
+
+                    // Integration with direct webhooks
+                    // order is paid and license keys are activated (licensespring.js)
+                    // TODO change to your URL
+                    registerLicenseKeys("api/licensespring-activate-licenses.php", details);
+                });
+            }
+        }).render('body');
+    </script>
+	
+</body>
